@@ -31,6 +31,7 @@ def Ctext(var):
 
 
 @app.route('/python')
+@app.route('/python/')
 @app.route('/python/<var>')
 def pythonf(var='is cool'):
     """returns Python and a variable text. Is cool being default"""
