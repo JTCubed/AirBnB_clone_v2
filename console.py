@@ -147,6 +147,7 @@ class HBNBCommand(cmd.Cmd):
                                     pass
                         setattr(newin_para, key, value)
                 print(newin_para.id)
+                storage.save()
 #                print(newin_para)
                 return
 
