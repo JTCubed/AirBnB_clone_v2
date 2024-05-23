@@ -42,7 +42,7 @@ class HBNBCommand(cmd.Cmd):
         (Brackets denote optional fields in usage example.)
         """
         _cmd = _cls = _id = _args = ''  # initialize line elements
-
+#        print(type(line))
         # scan for general formating - i.e '.', '(', ')'
         if not ('.' in line and '(' in line and ')' in line):
             return line
@@ -73,7 +73,7 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] is '{' and pline[-1] is'}'\
+                    if pline[0] == '{' and pline[-1] == '}'\
                             and type(eval(pline)) is dict:
                         _args = pline
                     else:
@@ -118,6 +118,41 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
+        if " " in args:
+            args2 = args.split(" ")
+            argslen = len(args2)
+#            print(argslen)
+            c_name = args2[0]
+            if c_name not in HBNBCommand.classes:
+                print("** class doesn't exist **")
+                return
+            else:
+                newin_para = HBNBCommand.classes[c_name]()
+                for param in args2[1:]:
+                    if '=' in param:
+                        r = param.split('=')
+                        key = r[0]
+                        value = r[1]
+
+                        if value.startswith('"') and value.endswith('"'):
+                            value = value[1:-1].replace('_', ' ').replace(
+                                '\\"', '"')
+                        else:
+                            if value.isdigit():
+                                value = int()
+                            else:
+                                try:
+                                    value = float(value)
+                                except ValueError:
+                                    pass
+                        setattr(newin_para, key, value)
+                print(newin_para.id)
+#                print(newin_para)
+                return
+
+            return
+#            print(type(args))
+
         elif args not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
@@ -272,7 +307,7 @@ class HBNBCommand(cmd.Cmd):
                 args.append(v)
         else:  # isolate args
             args = args[2]
-            if args and args[0] is '\"':  # check for quoted arg
+            if args and args[0] == '\"':  # check for quoted arg
                 second_quote = args.find('\"', 1)
                 att_name = args[1:second_quote]
                 args = args[second_quote + 1:]
@@ -280,10 +315,10 @@ class HBNBCommand(cmd.Cmd):
             args = args.partition(' ')
 
             # if att_name was not quoted arg
-            if not att_name and args[0] is not ' ':
+            if not att_name and args[0] != ' ':
                 att_name = args[0]
             # check for quoted val arg
-            if args[2] and args[2][0] is '\"':
+            if args[2] and args[2][0] == '\"':
                 att_val = args[2][1:args[2].find('\"', 1)]
 
             # if att_val was not quoted arg
@@ -319,6 +354,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
