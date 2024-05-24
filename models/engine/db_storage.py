@@ -23,7 +23,7 @@ class DBStorage:
         """Initialize DBStorage"""
         user = os.getenv('HBNB_MYSQL_USER')
         passwrd = os.getenv('HBNB_MYSQL_PWD')
-        host = 'localhost'
+        host = os.getenv("HBNB_MYSQL_HOST")
         datab = os.getenv('HBNB_MYSQL_DB')
         port = 3306
 
